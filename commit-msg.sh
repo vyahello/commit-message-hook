@@ -1,16 +1,19 @@
 #!/bin/bash
 
-COMMIT_MSG_FILE=".git/COMMIT_EDITMSG"
-COMMIT_MSG_OUTPUT="grep -v '^#' ${COMMIT_MSG_FILE}"
-SUBJECT_LINE="${COMMIT_MSG_OUTPUT} | awk 'NR==1'"
-NEXT_SUBJECT_LINE="${COMMIT_MSG_OUTPUT} | awk 'NR==2'"
-START_BODY_LINE="${COMMIT_MSG_OUTPUT} | awk 'NR==3'"
-LAST_LINE="${COMMIT_MSG_OUTPUT} | awk 'END {print}'"
-LAST_SECOND_LINE="${COMMIT_MSG_OUTPUT} | tail -2 | head -1"
-END_BODY_LINE="${COMMIT_MSG_OUTPUT} | tail -3 | head -1"
+COMMIT_MESSAGE_FILE=".git/COMMIT_EDITMSG"
+COMMIT_MESSAGE_OUTPUT="grep -v '^#' ${COMMIT_MESSAGE_FILE}"
+SUBJECT_LINE="${COMMIT_MESSAGE_OUTPUT} | awk 'NR==1'"
+NEXT_SUBJECT_LINE="${COMMIT_MESSAGE_OUTPUT} | awk 'NR==2'"
+START_BODY_LINE="${COMMIT_MESSAGE_OUTPUT} | awk 'NR==3'"
+LAST_LINE="${COMMIT_MESSAGE_OUTPUT} | awk 'END {print}'"
+LAST_SECOND_LINE="${COMMIT_MESSAGE_OUTPUT} | tail -2 | head -1"
+END_BODY_LINE="${COMMIT_MESSAGE_OUTPUT} | tail -3 | head -1"
 
 
-function error_msg {
+show-error() {
+:<<DOC
+    Shows error message in case of wrong commit message structure
+DOC
     echo "Fail to commit changes!"
     echo ""
     echo "Possible reasons:"
@@ -23,7 +26,7 @@ function error_msg {
     echo " - Last line does not contain a issue task"
     echo ""
     echo "Commit message sample:"
-    echo "Subject to be commited"
+    echo "Subject to be committed"
     echo ""
     echo "Body task description to be committed"
     echo ""
@@ -32,16 +35,20 @@ function error_msg {
 }
 
 
-function run_commit_msg_hook {
-    [[ `eval ${SUBJECT_LINE}` =~ ^[A-Z] ]] || error_message
-    [[ `eval ${SUBJECT_LINE}` =~ [[:alnum:]]+[[:space:]][[:alnum:]]+[[:space:]][[:alnum:]].* ]] || error_message
-    [[ `eval ${SUBJECT_LINE}` =~ ^Merged.* ]] && error_message
-    [[ `eval ${NEXT_SUBJECT_LINE}` =~ ^$ ]] || error_message
-    [[ `eval ${START_BODY_LINE}` =~ [[:alnum:]]+ ]] || error_message
-    [[ `eval ${LAST_LINE}` =~ ISSUE-[[:digit:]]+ ]] || error_message
-    [[ `eval ${LAST_SECOND_LINE}` =~ ^$ ]] || error_message
-    [[ `eval ${END_BODY_LINE}` =~ [[:alnum:]]+ ]] || error_message
+validate-commit-message() {
+:<<DOC
+    Validates user commit message structure
+DOC
+    [[ `eval ${SUBJECT_LINE}` =~ ^[A-Z] ]] || show-error
+    [[ `eval ${SUBJECT_LINE}` =~ [[:alnum:]]+[[:space:]][[:alnum:]]+[[:space:]][[:alnum:]].* ]] || show-error
+    [[ `eval ${SUBJECT_LINE}` =~ ^Merged.* ]] && show-error
+    [[ `eval ${NEXT_SUBJECT_LINE}` =~ ^$ ]] || show-error
+    [[ `eval ${START_BODY_LINE}` =~ [[:alnum:]]+ ]] || show-error
+    [[ `eval ${LAST_LINE}` =~ ISSUE-[[:digit:]]+ ]] || show-error
+    [[ `eval ${LAST_SECOND_LINE}` =~ ^$ ]] || show-error
+    [[ `eval ${END_BODY_LINE}` =~ [[:alnum:]]+ ]] || show-error
+    return 0
 }
 
 
-run_commit_msg_hook
+validate-commit-message

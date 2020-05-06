@@ -1,8 +1,9 @@
 # Commit message hook
-A hook will **force** you to create proper commit message including commit _subject_ and _body_. No one line commits are allowed (body is required to fill in).
+> A hook will **force** you to create proper commit message including commit **subject** and **body**.
+> No one line commits are allowed (body is required to fill in).
 
-# Usage
-Please move `commit-msg.sh` script into `.git/hooks` directory in the root of the current project.
+## Usage
+Please move `commit-msg.sh` script into `.git/hooks` directory in the root of the current project:
 ```bash
 mv commit-msg.sh .git/hooks
 ```
@@ -14,16 +15,27 @@ Then try to commit your changes. It will not allow you commit changes if:
   - Commit doesn't contain a body (should start from line 3)
   - Last line does not contain a issue task
 
-Commit sample
+Commit sample:
 
-```bash
+```text
 Commit message sample:
-Subject to be commited
+Subject to be committed
 
 Body task description to be committed
 
 ISSUE-11
 ```
+
+### Meta
+
+Author – _Volodymyr Yahello_.
+
+Distributed under the `Apache License` license. See [license](LICENSE.md) for more information.
+
+You can reach out me at:
+* [vyahello@gmail.com](vyahello@gmail.com)
+* [https://github.com/vyahello](https://github.com/vyahello)
+* [https://www.linkedin.com/in/volodymyr-yahello-821746127](https://www.linkedin.com/in/volodymyr-yahello-821746127)
 
 ## Contributing
 
