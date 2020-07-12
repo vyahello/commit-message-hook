@@ -47,7 +47,6 @@ DOC
     [[ `eval ${LAST_LINE}` =~ ISSUE-[[:digit:]]+ ]] || show-error
     [[ `eval ${LAST_SECOND_LINE}` =~ ^$ ]] || show-error
     [[ `eval ${END_BODY_LINE}` =~ [[:alnum:]]+ ]] || show-error
-    return 0
 }
 
 
